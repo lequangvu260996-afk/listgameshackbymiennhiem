@@ -13051,6 +13051,18 @@ Manage dormitories, improve magical courses and attract elite wizards to increas
     }
   });
 </script>
+
+  <script>
+  // Tự động mã hóa khoảng trắng trong đường dẫn của tất cả thẻ img, video và source
+  document.querySelectorAll('img, video, source').forEach(element => {
+    let src = element.getAttribute('src');
+    if (src && src.includes(' ')) {
+      // encodeURI sẽ tự động chuyển dấu cách thành %20 và giữ nguyên các cấu trúc khác
+      element.setAttribute('src', encodeURI(src));
+    }
+  });
+</script>
+  
 </body>
 </html>
 
