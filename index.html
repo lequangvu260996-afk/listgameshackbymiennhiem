@@ -941,7 +941,7 @@
   </div>
   
   <div class="game-content">
-    <img src="DeliciousMonsters(15-11-2026).jpg" alt="Delicious Monsters" class="game-image">
+    <img src="DeliciousMonsters (15-11-2026).jpg" alt="Delicious Monsters" class="game-image">
     <div class="description-toggle neon-green" onclick="toggleDescription('dm-desc-vn')">Mô tả chi tiết (Nhấn để mở/đóng)</div>
     
     <div id="dm-desc-vn" class="description-content">
@@ -986,7 +986,7 @@
 
     <div class="video-title neon-green">Video tham khảo lối chơi</div>
     <video class="script-video" controls>
-      <source src="DeliciousMonsters(15-11-2026).mp4" type="video/mp4">
+      <source src="DeliciousMonsters (15-11-2026).mp4" type="video/mp4">
     </video>
   </div>
 </div>
@@ -13042,7 +13042,15 @@ Manage dormitories, improve magical courses and attract elite wizards to increas
 
 
 
-
+<script>
+  // Tự động mã hóa khoảng trắng trong thẻ img và video src
+  document.querySelectorAll('img, video').forEach(element => {
+    let src = element.getAttribute('src');
+    if (src && src.includes(' ')) {
+      element.setAttribute('src', encodeURI(src));
+    }
+  });
+</script>
 </body>
 </html>
 
