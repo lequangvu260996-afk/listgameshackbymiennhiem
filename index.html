@@ -325,7 +325,8 @@
       font-weight: bold;
       margin: 20px 0 10px;
     }
-   .script-video {
+   /* Mặc định dùng cho video NGANG (16:9) */
+.script-video {
   width: 100%;
   max-width: 560px;
   aspect-ratio: 16 / 9;
@@ -335,6 +336,12 @@
   border: none;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0,255,0,0.4);
+}
+
+/* Tự động áp dụng nếu là video DỌC (YouTube Shorts 9:16) */
+.script-video.video-vertical {
+  max-width: 340px;
+  aspect-ratio: 9 / 16;
 }
     footer {
       text-align: center;
@@ -654,8 +661,6 @@
     
   </div>
 
-  
-  </div>
 
     
   <div id="income" class="tab-content">
@@ -988,9 +993,12 @@
     </div>
 
     <div class="video-title neon-green">Video tham khảo lối chơi</div>
-    <video class="script-video" controls>
-      <source src="DeliciousMonsters (15-11-2026).mp4" type="video/mp4">
-    </video>
+    <iframe class="script-video video-vertical" 
+            src="https://www.youtube.com/embed/pdWmmGQVAgQ" 
+            title="Delicious Monsters Gameplay" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+    </iframe>
   </div>
 </div>
     <!-- ==================== RUMBLE BEAVERS (VN) ==================== -->
@@ -4463,7 +4471,7 @@ data-category="Thủ thành,Chiến thuật,Tower Defense,Strategy">
   <div class="game-title-date neon-yellow">Legend of Slime (Ngày đăng: 17-4-2026) </div>
   <div class="hot-badge">HOT</div>
 </div>
-    <span class="toggle-btn" onclick="toggleGame(this)">View details</span>
+    <span class="toggle-btn" onclick="toggleGame(this)">Xem chi tiết</span>
   </div>
   <div class="game-content">
     <img src="LegendOfSlime (17-4-2026).jpg" alt="Legend Of Slime Game Screenshot" class="game-image">
@@ -4508,7 +4516,7 @@ data-category="Thủ thành,Chiến thuật,Tower Defense,Strategy">
   <div class="game-title-date neon-yellow">Mèo & Súp (Ngày đăng: 16-4-2026) </div>
   <div class="hot-badge">HOT</div>
 </div>
-    <span class="toggle-btn" onclick="toggleGame(this)">View details</span>
+    <span class="toggle-btn" onclick="toggleGame(this)">Xem chi tiết</span>
   </div>
 
   <div class="game-content">
@@ -4559,7 +4567,7 @@ data-category="Thủ thành,Chiến thuật,Tower Defense,Strategy">
   <div class="game-title-date neon-yellow">Immortal Rising (Ngày đăng: 15-4-2026) </div>
   <div class="hot-badge">HOT</div>
 </div>
-    <span class="toggle-btn" onclick="toggleGame(this)">View details</span>
+    <span class="toggle-btn" onclick="toggleGame(this)">Xem chi tiết</span>
   </div>
 
   <div class="game-content">
@@ -4693,7 +4701,7 @@ data-category="Thủ thành,Chiến thuật,Tower Defense,Strategy">
     <div class="new-game-item collapsed" data-game-name="Anh hùng trỗi dậy" data-category="Nhập vai,Nhiều người chơi,Nhàn rỗi,RPG,Multiplayer,Idle">
   <div class="game-header">
     <div class="game-title-wrapper">
-  <div class="game-title-date neon-yellow">Anh hùng trỗi dậy (Ngày đăng: 11-4-206)</div>
+  <div class="game-title-date neon-yellow">Anh hùng trỗi dậy (Ngày đăng: 11-4-2026)</div>
   <div class="hot-badge">🔥 HOT</div>
 </div>
     <span class="toggle-btn" onclick="toggleGame(this)">Xem chi tiết</span>
@@ -5890,7 +5898,7 @@ data-category="Thủ thành,Chiến thuật,Tower Defense,Strategy">
   <div class="game-content">
     <img src="ArchmagicSurvivors (1-12-2025).jpg" alt="Archmagic Survivors TD Game Screenshot" class="game-image">
     
-    <div class="description-toggle neon-green" onclick="toggleDescription('archmagicsurvivorst d-desc-vn')">
+    <div class="description-toggle neon-green" onclick="toggleDescription('archmagicsurvivorstd-desc-vn')">
       Mô tả chi tiết (Nhấn để mở/đóng)
     </div>
 
@@ -13066,50 +13074,51 @@ Manage dormitories, improve magical courses and attract elite wizards to increas
   });
 </script>
   
-</body>
+
+<!-- ... Toàn bộ danh sách các game của bạn nằm ở trên ... -->
+
+    <!-- DÁN ĐOẠN SCRIPT VÀO NGAY DƯỚI ĐÂY -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const youtubeMapping = {
+        "DeliciousMonsters (15-11-2026).mp4": { id: "pdWmmGQVAgQ", type: "vertical" },
+        "BlackDeck.mp4": { id: "MÃ_VIDEO_NGANG", type: "horizontal" }
+      };
+
+      document.querySelectorAll("video.script-video").forEach(videoEl => {
+        const sourceEl = videoEl.querySelector("source");
+        if (!sourceEl) return;
+
+        const rawSrc = decodeURIComponent(sourceEl.getAttribute("src") || "");
+        const fileName = rawSrc.split("/").pop();
+        const videoData = youtubeMapping[fileName];
+
+        if (videoData) {
+          const iframe = document.createElement("iframe");
+          iframe.className = videoData.type === "vertical" 
+            ? `${videoEl.className} video-vertical` 
+            : videoEl.className;
+
+          iframe.src = `https://www.youtube.com/embed/${videoData.id}`;
+          iframe.loading = "lazy";
+          iframe.title = "YouTube video player";
+          iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+          iframe.allowFullscreen = true;
+
+          videoEl.replaceWith(iframe);
+        }
+      });
+    });
+    </script>
+
+  </body>
 </html>
 
 
 
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  // 1. DANH SÁCH GHÉP NỐI: "Tên file mp4 trong code cũ" : "Mã ID video YouTube"
-  const youtubeMapping = {
-    "DeliciousMonsters (15-11-2026).mp4": "MÃ_ID_YOUTUBE_1",
-    "BlackDeck.mp4": "MÃ_ID_YOUTUBE_2",
-    "EvilTower.mp4": "MÃ_ID_YOUTUBE_3"
-    // Thêm các game khác theo đúng định dạng trên...
-  };
-
-  // 2. CODE TỰ ĐỘNG QUÉT VÀ BIẾN ĐỔI TOÀN BỘ THẺ <video>
-  document.querySelectorAll("video.script-video").forEach(videoEl => {
-    const sourceEl = videoEl.querySelector("source");
-    if (!sourceEl) return;
-
-    // Lấy tên file từ thuộc tính src
-    const rawSrc = decodeURIComponent(sourceEl.getAttribute("src") || "");
-    const fileName = rawSrc.split("/").pop(); // Lấy đúng tên file cuối cùng
-
-    // Nếu tìm thấy trong danh sách ghép nối thì thay bằng iframe YouTube
-    if (youtubeMapping[fileName]) {
-      const ytId = youtubeMapping[fileName];
-      const iframe = document.createElement("iframe");
-      
-      iframe.className = videoEl.className; // Giữ nguyên class "script-video" để ăn CSS neon
-      iframe.src = `https://www.youtube.com/embed/${ytId}`;
-      iframe.loading = "lazy"; // Chỉ tải video khi người dùng cuộn tới (giúp web siêu nhẹ)
-      iframe.title = "YouTube video player";
-      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-      iframe.allowFullscreen = true;
-
-      // Thay thế thẻ <video> cũ bằng <iframe> mới
-      videoEl.replaceWith(iframe);
-    }
-  });
-});
-</script>
-
+</body>
+</html>
 
 
 </html>
